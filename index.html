@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Flores Amarillas para Ti 🌻</title>
+    <title>Jardín de la Amistad 🌻</title>
     <style>
         :root {
-            --sky: linear-gradient(to bottom, #2d1b4d 0%, #e65100 60%, #ffb300 100%);
+            --sky: linear-gradient(to bottom, #2d1b4d 0%, #e65100 50%, #ffb300 100%);
             --grass-dark: #0a260f;
             --grass-light: #1b5e20;
-            --yellow-bright: #fbc02d;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -20,72 +19,71 @@
             position: fixed; inset: 0; background: #000;
             display: flex; justify-content: center; align-items: center; flex-direction: column; z-index: 1000; cursor: pointer;
         }
-        .bouquet { animation: float 3s infinite ease-in-out; text-align: center; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        #loader p { color: gold; margin-top: 20px; letter-spacing: 2px; font-size: 14px; text-transform: uppercase; }
+        .intro-sun { width: 120px; height: 120px; background: #fbc02d; border-radius: 50%; box-shadow: 0 0 50px #fbc02d; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } }
+        #loader p { color: #fff; margin-top: 20px; letter-spacing: 2px; text-align: center; font-size: 14px; }
 
-        /* Escenario */
-        #stage { position: relative; width: 100%; height: 100%; background: var(--sky); display: none; }
+        /* Escenario Principal */
+        #stage { position: relative; width: 100%; height: 100%; background: var(--sky); display: none; overflow: hidden; }
         
-        /* Sol de atardecer tapado */
-        .sun {
-            position: absolute; bottom: 25%; left: 50%;
-            width: 250px; height: 250px; background: #fff176;
-            border-radius: 50%; transform: translateX(-50%);
-            filter: blur(30px); opacity: 0.6; z-index: 1;
-        }
-
-        /* Texto Poético Tipo Máquina de Escribir */
         #sky-writer {
-            position: absolute; top: 10%; left: 10%; right: 10%;
-            color: #fff; font-size: clamp(16px, 4vw, 22px);
-            line-height: 1.6; text-align: center; font-style: italic;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.5); z-index: 5;
-            min-height: 100px;
+            position: absolute; top: 8%; left: 10%; right: 10%;
+            color: #fff; font-size: clamp(16px, 4.5vw, 24px);
+            line-height: 1.5; text-align: center; font-style: italic;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.6); z-index: 5;
         }
 
-        /* Campo y Suelo */
-        #garden { position: absolute; bottom: 0; width: 100%; height: 100%; z-index: 10; }
-        
-        .ground-base {
-            position: absolute; bottom: 0; width: 100%; height: 25%;
-            background: linear-gradient(to top, #051a08 0%, transparent 100%);
-            z-index: 2;
-        }
+        /* Suelo y Vegetación */
+        #garden { position: absolute; bottom: 0; width: 100%; height: 100%; z-index: 10; transition: transform 0.8s ease-in-out; }
+        .ground { position: absolute; bottom: 0; width: 100%; height: 20%; background: linear-gradient(to top, #051a08, transparent); z-index: 2; }
 
-        .grass-blade {
+        .grass {
             position: absolute; bottom: 0; width: 3px;
             background: linear-gradient(to top, var(--grass-dark), var(--grass-light));
             border-radius: 2px; transform-origin: bottom;
             animation: sway 3s infinite ease-in-out alternate;
         }
 
-        /* Flores */
-        .flower { position: absolute; bottom: 0; transform-origin: bottom center; }
-        .flower-head { position: relative; cursor: pointer; display: flex; justify-content: center; align-items: center; }
-
-        /* Girasoles Gigantes */
-        .sunflower-main { transform: scale(1.8); z-index: 100 !important; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); }
-        .petal { position: absolute; background: linear-gradient(to top, #fbc02d, #fff176); border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%; transform-origin: bottom center; bottom: 50%; }
-        .center { position: absolute; background: radial-gradient(circle, #3e2723, #1b1102); border-radius: 50%; z-index: 10; box-shadow: inset 0 0 10px #000; }
-
-        /* Mensaje dentro de la flor */
-        .flower-msg {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            color: #fff; font-size: 14px; font-weight: bold; text-align: center;
-            width: 80px; opacity: 0; transition: opacity 0.5s; pointer-events: none;
-            z-index: 20; text-shadow: 1px 1px 3px #000; line-height: 1.1;
+        /* Conejos */
+        .bunny {
+            position: absolute; bottom: 5%; width: 30px; height: 20px;
+            background: #eee; border-radius: 50% 50% 40% 40%; z-index: 15;
+            box-shadow: inset -2px -2px 5px #ccc;
         }
-        .flower-msg.show { opacity: 1; }
+        .bunny::before { content: ''; position: absolute; top: -10px; left: 5px; width: 6px; height: 12px; background: #eee; border-radius: 50%; box-shadow: 12px 0 0 #eee; }
+        @keyframes hop { 0%, 100% { transform: translateY(0) scaleX(1); } 50% { transform: translateY(-20px) scaleX(0.9); } }
 
-        .stem { width: 8px; background: linear-gradient(to right, #1b5e20, #2e7d32); border-radius: 4px; margin: -5px auto 0; }
+        /* Flores */
+        .flower { position: absolute; bottom: 0; transform-origin: bottom center; animation: sway 4s infinite ease-in-out alternate; }
+        .flower-head { position: relative; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+        .petal { position: absolute; border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%; transform-origin: bottom center; bottom: 50%; }
+        .center { position: absolute; border-radius: 50%; z-index: 10; }
+        .stem { width: 5px; background: linear-gradient(to right, #1b5e20, #2e7d32); border-radius: 3px; margin: -2px auto 0; }
 
-        /* Animaciones */
         @keyframes sway { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
 
-        #zoom-bg {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-            display: none; z-index: 500; backdrop-filter: blur(5px);
+        /* Zoom Overlay */
+        #zoom-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            display: none; z-index: 500; backdrop-filter: blur(8px);
+            justify-content: center; align-items: center; flex-direction: column;
+        }
+        .zoom-content { transform: scale(3); cursor: pointer; transition: transform 0.5s; }
+        #zoom-msg {
+            margin-top: 120px; color: #fff; font-size: 26px; font-weight: bold;
+            text-align: center; text-shadow: 0 0 15px #000; z-index: 600;
+            max-width: 80%; line-height: 1.2;
+        }
+
+        /* Pétalos cayendo */
+        .falling-petal {
+            position: absolute; top: -10%; background: #fbc02d;
+            border-radius: 150% 0 150% 0; opacity: 0.8;
+            animation: fall linear infinite; z-index: 550;
+        }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(110vh) rotate(720deg); }
         }
     </style>
 </head>
@@ -94,119 +92,146 @@
 <audio id="bgm" loop><source src="musica.mp3" type="audio/mpeg"></audio>
 
 <div id="loader">
-    <div class="bouquet" id="intro-flower"></div>
-    <p>Toca para abrir tu jardín 💛</p>
+    <div class="intro-sun"></div>
+    <p>PARA UNA PERSONA INCREÍBLE ✨<br>Toca para entrar al jardín</p>
 </div>
 
 <div id="stage">
-    <div class="sun"></div>
     <div id="sky-writer"></div>
-    <div class="ground-base"></div>
+    <div class="ground"></div>
     <div id="garden"></div>
 </div>
 
-<div id="zoom-bg"></div>
+<div id="zoom-overlay">
+    <div id="petal-container"></div>
+    <div class="zoom-content" id="zoom-flower-target"></div>
+    <div id="zoom-msg"></div>
+</div>
 
 <script>
     const stage = document.getElementById('stage');
     const loader = document.getElementById('loader');
     const garden = document.getElementById('garden');
     const skyWriter = document.getElementById('sky-writer');
+    const zoomOverlay = document.getElementById('zoom-overlay');
+    const zoomFlowerTarget = document.getElementById('zoom-flower-target');
+    const zoomMsg = document.getElementById('zoom-msg');
+    const petalContainer = document.getElementById('petal-container');
     const bgm = document.getElementById('bgm');
 
-    const poeticText = "En este día tan especial, donde el amarillo de los girasoles ilumina cada rincón, quiero regalarte este jardín eterno... 🌻 Porque una amistad como la tuya es el regalo más sincero que la vida me ha dado. Gracias por ser esa luz constante y por hacer que cada momento brille. ¡Feliz día de las flores amarillas! ✨💛";
+    const mainText = "En este día tan especial, donde el amarillo de los girasoles ilumina cada rincón, quiero regalarte este jardín eterno... 🌻 Porque una amistad como la tuya es el regalo más sincero que la vida me ha dado. Gracias por ser esa luz constante y por hacer que cada momento brille. ¡Feliz día de las flores amarillas! ✨💛";
 
-    const friendshipPhrases = [
-        "¡Feliz día de\nlas flores\namarillas! 🌻",
-        "¡Gracias por\ntu hermosa\namistad! 💛",
-        "Eres una\npersona\nincreíble ✨",
-        "Tu amistad\nes muy\nvaliosa 🌼"
+    const phrases = [
+        "¡Feliz día de las\nflores amarillas! 🌻",
+        "¡Gracias por tu\nhermosa amistad! 💛",
+        "Eres una persona\nincreíble ✨",
+        "Tu amistad es\nmuy valiosa 🌼"
     ];
 
     function typeWriter(text, i = 0) {
         if (i < text.length) {
             skyWriter.innerHTML += text.charAt(i);
-            setTimeout(() => typeWriter(text, i + 1), 60);
+            setTimeout(() => typeWriter(text, i + 1), 50);
         }
     }
 
-    function createPetals(head, isBig) {
-        const count = isBig ? 18 : 12;
-        const size = isBig ? {w: 25, h: 60} : {w: 12, h: 30};
-        for(let i=0; i<count; i++) {
-            const p = document.createElement('div');
-            p.className = 'petal';
-            p.style.width = size.w + 'px';
-            p.style.height = size.h + 'px';
-            p.style.transform = `rotate(${i * (360/count)}deg)`;
-            head.appendChild(p);
-        }
-        const center = document.createElement('div');
-        center.className = 'center';
-        center.style.width = (isBig ? 50 : 20) + 'px';
-        center.style.height = (isBig ? 50 : 20) + 'px';
-        head.appendChild(center);
-    }
-
-    function addFlower(x, z, phrase = null) {
-        const isBig = phrase !== null;
+    function createFlower(x, z, type, phrase = null) {
         const wrap = document.createElement('div');
         wrap.className = 'flower';
         wrap.style.left = x + '%';
-        wrap.style.bottom = '-5px';
+        wrap.style.bottom = (z/10) + '%';
         wrap.style.zIndex = Math.floor(z);
-        if(isBig) wrap.classList.add('sunflower-main');
-        else wrap.style.transform = `scale(${0.4 + (z/150)})`;
+        wrap.style.animationDelay = -(Math.random() * 5) + 's';
+
+        const isMain = phrase !== null;
+        const scale = isMain ? 1.5 : (0.3 + Math.random() * 0.5);
+        wrap.style.transform = `scale(${scale})`;
 
         const head = document.createElement('div');
         head.className = 'flower-head';
-        createPetals(head, isBig);
+        
+        // Colores según tipo
+        let petalColor, centerColor;
+        if(type === 'yellow') { petalColor = '#fbc02d'; centerColor = '#3e2723'; }
+        else if(type === 'pink') { petalColor = '#f06292'; centerColor = '#880e4f'; }
+        else { petalColor = '#fff'; centerColor = '#fdd835'; }
 
-        if(isBig) {
-            const msg = document.createElement('div');
-            msg.className = 'flower-msg';
-            msg.innerText = phrase;
-            head.appendChild(msg);
-
-            head.onclick = (e) => {
-                e.stopPropagation();
-                msg.classList.toggle('show');
-                head.style.transform = msg.classList.contains('show') ? 'scale(1.2)' : 'scale(1)';
-            };
+        // Crear pétalos
+        const pCount = isMain ? 18 : 10;
+        for(let i=0; i<pCount; i++) {
+            const p = document.createElement('div');
+            p.className = 'petal';
+            p.style.width = (isMain ? 20 : 10) + 'px';
+            p.style.height = (isMain ? 50 : 25) + 'px';
+            p.style.background = petalColor;
+            p.style.transform = `rotate(${i * (360/pCount)}deg)`;
+            head.appendChild(p);
         }
+
+        const center = document.createElement('div');
+        center.className = 'center';
+        center.style.width = (isMain ? 40 : 15) + 'px';
+        center.style.height = (isMain ? 40 : 15) + 'px';
+        center.style.background = centerColor;
+        head.appendChild(center);
 
         const stem = document.createElement('div');
         stem.className = 'stem';
-        stem.style.height = (isBig ? 120 : 60) + (z*0.5) + 'px';
-        
+        stem.style.height = (isMain ? 120 : 50) + 'px';
+
         wrap.appendChild(head);
         wrap.appendChild(stem);
-        garden.appendChild(wrap);
+
+        if(isMain) {
+            head.onclick = () => openZoom(head.cloneNode(true), phrase);
+        }
+
+        return wrap;
     }
 
-    function init() {
-        // Hierba de fondo (Suelo lleno)
-        for(let i=0; i<120; i++) {
-            const grass = document.createElement('div');
-            grass.className = 'grass-blade';
-            grass.style.left = Math.random() * 100 + '%';
-            grass.style.height = (30 + Math.random() * 70) + 'px';
-            grass.style.bottom = '0';
-            grass.style.opacity = 0.6;
-            grass.style.zIndex = Math.floor(Math.random()*50);
-            garden.appendChild(grass);
-        }
+    function openZoom(clone, text) {
+        zoomFlowerTarget.innerHTML = '';
+        zoomFlowerTarget.appendChild(clone);
+        zoomMsg.innerText = text;
+        zoomOverlay.style.display = 'flex';
+        startPetals();
+        zoomOverlay.onclick = closeZoom;
+    }
 
-        // Flores pequeñas decorativas
-        for(let i=0; i<40; i++) {
-            addFlower(Math.random()*100, Math.random()*80);
-        }
+    function closeZoom() {
+        zoomOverlay.style.display = 'none';
+        petalContainer.innerHTML = '';
+    }
 
-        // Los 4 Girasoles Gigantes
-        const positions = [15, 38, 62, 85];
-        positions.forEach((pos, i) => {
-            addFlower(pos, 150, friendshipPhrases[i]);
-        });
+    function startPetals() {
+        for(let i=0; i<30; i++) {
+            const p = document.createElement('div');
+            p.className = 'falling-petal';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.width = (10 + Math.random() * 15) + 'px';
+            p.style.height = (10 + Math.random() * 15) + 'px';
+            p.style.animationDuration = (3 + Math.random() * 4) + 's';
+            p.style.animationDelay = (Math.random() * 5) + 's';
+            petalContainer.appendChild(p);
+        }
+    }
+
+    function spawnBunny() {
+        const b = document.createElement('div');
+        b.className = 'bunny';
+        const startLeft = -50;
+        b.style.left = startLeft + 'px';
+        garden.appendChild(b);
+
+        let pos = startLeft;
+        function move() {
+            pos += 1.5;
+            b.style.left = pos + 'px';
+            b.style.animation = 'hop 0.6s infinite ease-out';
+            if(pos < window.innerWidth + 50) requestAnimationFrame(move);
+            else b.remove();
+        }
+        move();
     }
 
     loader.onclick = () => {
@@ -215,16 +240,35 @@
         setTimeout(() => {
             loader.style.display = 'none';
             stage.style.display = 'block';
-            init();
-            setTimeout(() => typeWriter(poeticText), 1000);
+            
+            // Generar Pasto
+            for(let i=0; i<80; i++) {
+                const g = document.createElement('div');
+                g.className = 'grass';
+                g.style.left = Math.random() * 100 + '%';
+                g.style.height = (40 + Math.random() * 60) + 'px';
+                g.style.animationDelay = -(Math.random()*3) + 's';
+                garden.appendChild(g);
+            }
+
+            // Flores de fondo
+            const colors = ['yellow', 'pink', 'white'];
+            for(let i=0; i<45; i++) {
+                const c = colors[Math.floor(Math.random()*colors.length)];
+                garden.appendChild(createFlower(Math.random()*100, Math.random()*80, c));
+            }
+
+            // Los 4 Girasoles Principales
+            const mainPos = [15, 38, 62, 85];
+            mainPos.forEach((x, i) => {
+                garden.appendChild(createFlower(x, 90, 'yellow', phrases[i]));
+            });
+
+            setTimeout(() => typeWriter(mainText), 1000);
+            setInterval(spawnBunny, 8000);
+            spawnBunny();
         }, 500);
     };
-
-    // Flor del principio
-    const introHead = document.createElement('div');
-    introHead.className = 'flower-head sunflower-main';
-    createPetals(introHead, true);
-    document.getElementById('intro-flower').appendChild(introHead);
 </script>
 </body>
 </html>
